@@ -1,6 +1,8 @@
 package com.cesde.dealership.service.impl;
 
+import com.cesde.dealership.model.Car;
 import com.cesde.dealership.model.Sale;
+import com.cesde.dealership.repository.CarRepository;
 import com.cesde.dealership.repository.SaleRepository;
 import com.cesde.dealership.service.ISaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,13 @@ public class SaleServiceImpl implements ISaleService {
     @Autowired
     private SaleRepository saleRepository;
 
+    @Autowired
+    private CarRepository carRepository;
+
     @Override
     public Sale createSale(Sale sale) {
+        Optional<Car> car = carRepository.findByPlateNumber(sale.getCar().getPlateNumber());
+        sale.setCar(car.get());
         return saleRepository.save(sale);
     }
 
@@ -32,6 +39,8 @@ public class SaleServiceImpl implements ISaleService {
 
     @Override
     public Sale updateSale(Sale sale, Sale updatedSale) {
+        Optional<Car> car = carRepository.findByPlateNumber(sale.getCar().getPlateNumber());
+        updatedSale.setCar(car.get());
         updatedSale.setId(sale.getId());
         return saleRepository.save(updatedSale);
     }

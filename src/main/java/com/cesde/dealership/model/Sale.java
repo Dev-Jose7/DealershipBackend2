@@ -1,5 +1,6 @@
 package com.cesde.dealership.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -27,12 +28,22 @@ public class Sale {
     @Column(nullable = false)
     private Double cost;
 
+    // Relación muchos a uno: muchas ventas pueden pertenecer a un mismo cliente.
+    // 'nullable = false' obliga a que cada venta tenga un cliente asignado.
+    // @JsonBackReference evita la serialización infinita y se empareja con "customer-sales".
+    // Es decir, customer no se encontrará en el JSON de la respuesta cuando se consulte un registro de Sale
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonBackReference("customer-sales")
     private Customer customer;
 
+    // Relación muchos a uno: muchas ventas pueden asociarse a un mismo carro.
+    // 'referencedColumnName = "plate_number"' indica que no se referencia la PK del carro, sino su campo 'plate_number'.
+    // @JsonBackReference se empareja con "car-sales" para evitar ciclos de serialización.
+    // Es decir, customer no se encontrará en el JSON de la respuesta cuando se consulte un registro de Sale
     @ManyToOne
-    @JoinColumn(name = "car_plate_number", referencedColumnName = "plate_number", nullable = false) // "plate_number" indica que se hace referencia a una columna que no es la primaria (id) de Car.
+    @JoinColumn(name = "car_plate_number", referencedColumnName = "plate_number", nullable = false)
+    @JsonBackReference("car-sales")
     private Car car;
 
     public Integer getId() {
