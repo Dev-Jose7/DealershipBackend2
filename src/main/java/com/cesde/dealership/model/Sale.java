@@ -18,7 +18,7 @@ public class Sale {
     @NotNull(message = "Debes indicar un tipo de venta")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Enum<TypeSale> type;
+    private TypeSale type;
 
     @NotNull(message = "Debes digitar una fecha")
     @Column(name = "date_sale", nullable = false)
@@ -45,11 +45,11 @@ public class Sale {
         this.id = id;
     }
 
-    public Enum<TypeSale> getType() {
+    public TypeSale getType() {
         return type;
     }
 
-    public void setType(Enum<TypeSale> type) {
+    public void setType(TypeSale type) {
         this.type = type;
     }
 
