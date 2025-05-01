@@ -88,7 +88,6 @@ public class Customer {
                 ", fullname='" + fullname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", sales=" + sales +
                 '}';
     }
 }

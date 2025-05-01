@@ -31,6 +31,11 @@ public class CarServiceImpl implements ICarService {
     }
 
     @Override
+    public Optional<Car> getCarByPlateNumber(String plateNumber) {
+        return carRepository.findByPlateNumber(plateNumber);
+    }
+
+    @Override
     public Car updateCar(Car car, Car updatedCar) {
         updatedCar.setId(car.getId());
         return carRepository.save(updatedCar);

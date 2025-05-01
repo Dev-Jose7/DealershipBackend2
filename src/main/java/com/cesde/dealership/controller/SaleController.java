@@ -1,6 +1,10 @@
 package com.cesde.dealership.controller;
 
+import com.cesde.dealership.model.Car;
+import com.cesde.dealership.model.Customer;
 import com.cesde.dealership.model.Sale;
+import com.cesde.dealership.service.ICarService;
+import com.cesde.dealership.service.ICustomerService;
 import com.cesde.dealership.service.ISaleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,12 @@ public class SaleController {
 
     @Autowired
     private ISaleService saleService;
+
+    @Autowired
+    private ICarService carService;
+
+    @Autowired
+    private ICustomerService customerService;
 
     @GetMapping("/all")
     public ResponseEntity<List<Sale>> allSale(){
@@ -38,9 +48,18 @@ public class SaleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Sale> createSale(@Valid @RequestBody Sale sale){
+    public ResponseEntity<?> createSale(@Valid @RequestBody Sale sale){
         Sale newSale = saleService.createSale(sale);
-        return new ResponseEntity<>(newSale, HttpStatus.CREATED);
+        Optional<Car> carFound = carService.getCarByPlateNumber(sale.getCar().getPlateNumber());
+        Optional<Customer> customerFound = customerService.getCustomerById(sale.getCustomer().getId());
+
+        if(carFound.isPresent() && customerFound.isPresent()){
+            return new ResponseEntity<>(newSale, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Cliente y/o Carro no encontrados", HttpStatus.NOT_FOUND);
+        }
+
+
     }
 
     @PutMapping("/edit/{id}")

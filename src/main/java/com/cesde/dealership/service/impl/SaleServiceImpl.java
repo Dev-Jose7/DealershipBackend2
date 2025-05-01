@@ -1,6 +1,7 @@
 package com.cesde.dealership.service.impl;
 
 import com.cesde.dealership.model.Car;
+import com.cesde.dealership.model.Customer;
 import com.cesde.dealership.model.Sale;
 import com.cesde.dealership.repository.CarRepository;
 import com.cesde.dealership.repository.SaleRepository;
